@@ -20,7 +20,7 @@ checksum = "d84e1d907bfc5795a6addb95ef8666141ee73c8f2f5250ff2a46bf4e4f4aec8a"
 
 [[package]]
 name = "bigint-benchmark"
-version = "0.0.0"
+version = "0.1.0"
 dependencies = [
  "ibig",
  "num-bigint 0.4.0",
