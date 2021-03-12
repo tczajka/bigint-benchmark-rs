@@ -1,0 +1,19 @@
+[package]
+name = "bigint-benchmark"
+version = "0.1.0"
+authors = ["Tomek Czajka <tczajka@gmail.com>"]
+edition = "2018"
+description = "Benchmarks for big integer implementations"
+keywords = ["bigint", "bignum", "mathematics", "benchmark"]
+categories = ["mathematics"]
+license = "MIT"
+repository = "https://github.com/tczajka/bigint-benchmark-rs"
+homepage = "https://github.com/tczajka/bigint-benchmark-rs"
+readme = "README.md"
+
+[dependencies]
+ibig = "0.2.0"
+num-bigint = "0.4.0"
+ramp = "0.5.9"
+rug = "1.11.0"
+rust-gmp = "0.5.0"
