@@ -12,7 +12,8 @@ homepage = "https://github.com/tczajka/bigint-benchmark-rs"
 readme = "README.md"
 
 [dependencies]
-ibig = "0.2.0"
+clap = "2.33.3"
+ibig = "0.2.1"
 num-bigint = "0.4.0"
 ramp = "0.5.9"
 rug = "1.11.0"

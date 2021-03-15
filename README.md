@@ -1,15 +1,61 @@
 # bigint-benchmark-rs
 
-A benchmark for Rust big integer implementations.
+Benchmarks for Rust big integer implementations.
 
-The benchmark is: calculate 1 million digits of the number e, using the Binary Splitting method.
+Each benchmark is run 5 times, with the calculation repeated for at least 10 seconds each time.
+The median run is used as the result.
 
-Current results (on an Intel i7 laptop, average of 3 runs):
+## Results
 
-| Library        | Version | Time (s) | Notes    |
+All benchmarks were run for n = 1 million and n = 10 million on an Intel i7 laptop.
+
+| Library        | Version | Notes    | e 1mil | e 10mil | fib 1mil | fib 10mil | fib_hex 1mil | fib_hex 10mil |
 | -------------- | --------| ------ | -------- |
-| rug            | 1.11.0  | 0.271  | Uses [GMP](https://gmplib.org/) |
-| rust-gmp       | 0.5.0   | 0.278  | Uses [GMP](https://gmplib.org/) |
-| ibig           | 0.2.0   | 1.014  | Pure rust |
-| ramp           | 0.5.9   | 12.469 | Rust and inline assembly (requires nightly toolchain) |
-| num-bigint     | 0.4.0   | 30.970 | Pure rust |
+| rug            | 1.11.0  | Uses [GMP](https://gmplib.org/) | XXX | e1mil | fib 1 mil | fib 10 mil | fib_hex 1mil | fib_hex 10mil |
+| rust-gmp       | 0.5.0   | Uses [GMP](https://gmplib.org/) | XXX |
+| ibig           | 0.2.1   | Pure rust |
+| ramp           | 0.5.9   | Rust and inline assembly (requires nightly toolchain) |
+| num-bigint     | 0.4.0   | Pure rust |
+
+## Usage
+
+Calculate 100 digits of `e` and compare answers:
+
+```
+$ bigint-benchmark --task e --lib ibig --lib num-bigint --lib ramp --lib rug --lib rust-gmp -n 100 print                                             
+answer = 2.718281828459045235360287471352662497757247093699959574966967627724076630353547594571382178525166427
+ibig computed the answer
+num-bigint agrees
+ramp agrees
+rug agrees
+rust-gmp agrees
+```
+
+Calculate the 500-th Fibonacci number and compare answers:
+
+```
+$ ./target/release/bigint-benchmark --task fib --lib ibig --lib num-bigint --lib ramp --lib rug --lib rust-gmp -n 500 print                                            
+answer = 139423224561697880139724382870407283950070256587697307264108962948325571622863290691557658876222521294125
+ibig computed the answer
+num-bigint agrees
+ramp agrees
+rug agrees
+rust-gmp agrees
+```
+
+Benchmark calculating a million digits of e.
+
+```
+```
+
+
+## Tasks
+
+The tasks are:
+* `e`: Calculate n digits of the number e, using the Binary Splitting method.
+       This uses numbers of different sizes, addition, multiplication, division, and base
+       conversion to 10.
+* `fib`: Calculate the n-th Fibonacci number, using the matrix squaring method.
+         This uses addition, multiplication and base conversion to 10.
+* `fib_hex`: Calculate the n-th Fibonacci number in hexadecimal.
+         This uses addition, multiplication and base conversion to 16.
