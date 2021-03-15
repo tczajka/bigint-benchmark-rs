@@ -10,12 +10,12 @@ The median run is used as the result.
 All benchmarks were run for n = 1 million and n = 10 million on an Intel i7 laptop.
 
 | Library        | Version | Notes    | e 1mil | e 10mil | fib 1mil | fib 10mil | fib_hex 1mil | fib_hex 10mil |
-| -------------- | --------| ------ | -------- |
-| rug            | 1.11.0  | Uses [GMP](https://gmplib.org/) | XXX | e1mil | fib 1 mil | fib 10 mil | fib_hex 1mil | fib_hex 10mil |
-| rust-gmp       | 0.5.0   | Uses [GMP](https://gmplib.org/) | XXX |
-| ibig           | 0.2.1   | Pure rust |
-| ramp           | 0.5.9   | Rust and inline assembly (requires nightly toolchain) |
-| num-bigint     | 0.4.0   | Pure rust |
+| -------------- | --------| ------ | -------- | ------- | -------- | --------- | ------------ | ------------- |
+| rug            | 1.11.0  | Uses [GMP](https://gmplib.org/) | e1mil | e 10mil | fib 1 mil | fib 10 mil | fib_hex 1mil | fib_hex 10mil |
+| rust-gmp       | 0.5.0   | Uses [GMP](https://gmplib.org/) | e1mil | e 10mil | fib 10 mil | fib_hex 1mil | fib_hex 10mil |
+| ibig           | 0.2.1   | Pure rust | e1mil | e 10mil | fib 10 mil | fib_hex 1mil | fib_hex 10mil |
+| ramp           | 0.5.9   | Rust and inline assembly (requires nightly toolchain) | e1mil | e 10mil | fib 10 mil | fib_hex 1mil | fib_hex 10mil |
+| num-bigint     | 0.4.0   | Pure rust | e1mil | e 10mil | fib 10 mil | fib_hex 1mil | fib_hex 10mil |
 
 ## Usage
 
@@ -48,7 +48,6 @@ Benchmark calculating a million digits of e.
 ```
 ```
 
-
 ## Tasks
 
 The tasks are:
@@ -59,3 +58,5 @@ The tasks are:
          This uses addition, multiplication and base conversion to 10.
 * `fib_hex`: Calculate the n-th Fibonacci number in hexadecimal.
          This uses addition, multiplication and base conversion to 16.
+
+`e` is the most interesting in that it uses the largest variety of operations and number sizes.
