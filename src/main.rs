@@ -57,12 +57,12 @@ fn command_print(libs: &[String], task: &str, n: u32) {
         match &answer {
             None => {
                 println!("answer = {}", a);
-                println!("{} computed the answer", lib_name);
+                println!("{:10} agrees", lib_name);
                 answer = Some(a);
             }
             Some(ans) => {
                 if *ans == a {
-                    println!("{} agrees", lib_name);
+                    println!("{:10} agrees", lib_name);
                 } else {
                     println!("{} disagrees!", lib_name);
                 }
@@ -75,24 +75,24 @@ fn command_benchmark(libs: &[String], task: &str, n: u32) {
     let mut answer: Option<String> = None;
     let mut results: Vec<(&String, Duration)> = Vec::new();
     for lib_name in libs {
-        eprintln!("Benchmarking {}", lib_name);
+        println!("{}", lib_name);
         // Take the median of 5 attempts, each attempt at least 10 seconds.
         let mut durations: Vec<Duration> = Vec::new();
         for sample_number in 0..5 {
-            let mut iter = 1;
-            let duration = loop {
-                let (a, duration) = run_task(lib_name, task, n, iter);
+            let mut iter = 0;
+            let mut duration = Duration::from_secs(0);
+            while duration < Duration::from_secs(10) {
+                let i = iter.max(1);
+                let (a, d) = run_task(lib_name, task, n, i);
                 match &answer {
                     None => answer = Some(a),
                     Some(ans) => assert!(*ans == a),
                 }
-
-                if duration >= Duration::from_secs(10) {
-                    break duration / iter;
-                }
-                iter *= 2;
+                iter += i;
+                duration += d;
             };
-            eprintln!(
+            let duration = duration / iter;
+            println!(
                 "Attempt {}: {} iterations {} ms",
                 sample_number,
                 iter,
@@ -105,8 +105,9 @@ fn command_benchmark(libs: &[String], task: &str, n: u32) {
         results.push((lib_name, duration));
     }
     results.sort_by_key(|&(_, d)| d);
+    println!("Results");
     for (lib_name, duration) in results {
-        println!("{:15} {} ms", lib_name, duration.as_millis());
+        println!("{:10} {} ms", lib_name, duration.as_millis());
     }
 }
 
