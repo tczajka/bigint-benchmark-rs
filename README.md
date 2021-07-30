@@ -13,7 +13,7 @@ The median run is used as the result.
 | [rust-gmp](https://crates.io/crates/rust-gmp)       | 0.5.0   | Links to [GMP](https://gmplib.org/)  | 0.017  |  0.304 |    4.585 |  0.017  |   0.336 | 0.060     |
 | [ibig](https://crates.io/crates/ibig)               | 0.2.1   | Pure Rust                            | 0.031  |  0.973 |   30.749 |  0.037  |   1.252 | 0.279     |
 | [ramp](https://crates.io/crates/ramp)               | 0.5.9   | Uses assembly (requires nightly)     | 0.135  | 12.487 | 1233.225 |  0.355  |  34.847 | 0.386     |
-| [num-bigint](https://crates.io/crates/num-bigint)   | 0.4.0   | Pure Rust                            | 0.325  | 31.006 | 3098.511 |  1.161  | 115.234 | 0.401     |
+| [num-bigint](https://crates.io/crates/num-bigint)   | 0.4.0   | Pure Rust, no `unsafe`               | 0.325  | 31.006 | 3098.511 |  1.161  | 115.234 | 0.401     |
 
 Times in seconds.
 
