@@ -90,7 +90,7 @@ fn command_benchmark(libs: &[String], task: &str, n: u32) {
                 }
                 iter += i;
                 duration += d;
-            };
+            }
             let duration = duration / iter;
             println!(
                 "Attempt {}: {} iterations {} ms",
@@ -101,7 +101,7 @@ fn command_benchmark(libs: &[String], task: &str, n: u32) {
             durations.push(duration);
         }
         durations.sort();
-        let duration = durations[2];
+        let duration = durations[0];
         results.push((lib_name, duration));
     }
     results.sort_by_key(|&(_, d)| d);

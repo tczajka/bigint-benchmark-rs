@@ -3,17 +3,27 @@
 Benchmarks for Rust big integer implementations.
 
 Each benchmark is run 5 times, with the calculation repeated for at least 10 seconds each time.
-The median run is used as the result.
+The fastest attempt is used as the result.
+
+## Libraries
+
+| Library                                             | Version | Notes                                               |
+| --------------                                      | ------- | ------                                              |
+| [rug](https://crates.io/crates/rug)                 | 1.13.0  | Links to libc and [GMP](https://gmplib.org/)        |
+| [rust-gmp](https://crates.io/crates/rust-gmp)       | 0.5.0   | Links to libc and [GMP](https://gmplib.org/)        |
+| [ibig](https://crates.io/crates/ibig)               | 0.3.4   | Pure Rust, no_std                                   |
+| [num-bigint](https://crates.io/crates/num-bigint)   | 0.4.3   | Pure Rust, no_std                                   |
+| [ramp](https://crates.io/crates/ramp)               | 0.6.0   | Requires nightly Rust, uses x86_64 assembly         |
 
 ## Results
 
-| Library                                             | Version | Notes                                | e 100k | e 1m   |  e 10m   | fib 1m  | fib 10m | fib_hex 10m |
-| --------------                                      | ------- | ------                               | ----:  | -----: | -------: | ------: | ------: | ----------: |
-| [rug](https://crates.io/crates/rug)                 | 1.11.0  | Links to [GMP](https://gmplib.org/)  | 0.016  |  0.296 |    4.520 |  0.015  |   0.336 | 0.060     |
-| [rust-gmp](https://crates.io/crates/rust-gmp)       | 0.5.0   | Links to [GMP](https://gmplib.org/)  | 0.017  |  0.304 |    4.585 |  0.017  |   0.336 | 0.060     |
-| [ibig](https://crates.io/crates/ibig)               | 0.2.1   | Pure Rust                            | 0.031  |  0.973 |   30.749 |  0.037  |   1.252 | 0.279     |
-| [ramp](https://crates.io/crates/ramp)               | 0.5.9   | Uses assembly (requires nightly)     | 0.135  | 12.487 | 1233.225 |  0.355  |  34.847 | 0.386     |
-| [num-bigint](https://crates.io/crates/num-bigint)   | 0.4.0   | Pure Rust                            | 0.325  | 31.006 | 3098.511 |  1.161  | 115.234 | 0.401     |
+| Library                                             | e 100k | e 1m   |  e 10m   | fib 10m | fib 100m | fib_hex 100m |
+| --------------                                      | ----:  | -----: | -------: | ------: | -------: | -----------: |
+| [rug](https://crates.io/crates/rug)                 | 0.016  |  0.270 |    4.522 | 0.335   | 5.907    | 0.974        |
+| [rust-gmp](https://crates.io/crates/rust-gmp)       | 0.017  |  0.304 |    4.613 | 0.335   | 5.912    | 0.956        |
+| [ibig](https://crates.io/crates/ibig)               | 0.033  |  0.975 |   30.838 | 1.192   | 40.566   | 8.676        |
+| [num-bigint](https://crates.io/crates/num-bigint)   | 0.083  |  6.760 |  655.281 | 10.073  | 945.635  | 8.952        |
+| [ramp](https://crates.io/crates/ramp)               | 0.135  | 12.567 | 1243.958 | 35.315  | 3555.541 | 16.671       |
 
 Times in seconds.
 
@@ -44,42 +54,6 @@ rust-gmp   agrees
 Benchmark calculating a million digits of e:
 ```
 $ bigint-benchmark --task e --lib ibig --lib num-bigint --lib ramp --lib rug --lib rust-gmp -n 1000000 benchmark
-ibig
-Attempt 0: 16 iterations 977 ms
-Attempt 1: 16 iterations 973 ms
-Attempt 2: 16 iterations 973 ms
-Attempt 3: 16 iterations 973 ms
-Attempt 4: 16 iterations 973 ms
-num-bigint
-Attempt 0: 1 iterations 30965 ms
-Attempt 1: 1 iterations 30960 ms
-Attempt 2: 1 iterations 31006 ms
-Attempt 3: 1 iterations 31090 ms
-Attempt 4: 1 iterations 31075 ms
-ramp
-Attempt 0: 1 iterations 12488 ms
-Attempt 1: 1 iterations 12489 ms
-Attempt 2: 1 iterations 12485 ms
-Attempt 3: 1 iterations 12486 ms
-Attempt 4: 1 iterations 12487 ms
-rug
-Attempt 0: 64 iterations 296 ms
-Attempt 1: 64 iterations 297 ms
-Attempt 2: 64 iterations 297 ms
-Attempt 3: 64 iterations 296 ms
-Attempt 4: 64 iterations 296 ms
-rust-gmp
-Attempt 0: 64 iterations 305 ms
-Attempt 1: 64 iterations 304 ms
-Attempt 2: 64 iterations 304 ms
-Attempt 3: 64 iterations 305 ms
-Attempt 4: 64 iterations 304 ms
-Results
-rug        296 ms
-rust-gmp   304 ms
-ibig       973 ms
-ramp       12487 ms
-num-bigint 31006 ms
 ```
 
 ## Tasks

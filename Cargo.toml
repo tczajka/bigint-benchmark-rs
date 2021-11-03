@@ -1,6 +1,6 @@
 [package]
 name = "bigint-benchmark"
-version = "0.2.0"
+version = "0.2.1"
 authors = ["Tomek Czajka <tczajka@gmail.com>"]
 edition = "2018"
 description = "Benchmarks for big integer implementations"
@@ -13,8 +13,8 @@ readme = "README.md"
 
 [dependencies]
 clap = "2.33.3"
-ibig = "0.2.1"
-num-bigint = "0.4.0"
-ramp = "0.5.9"
-rug = "1.11.0"
+ibig = "0.3.4"
+num-bigint = "0.4.3"
+ramp = "0.6.0"
+rug = "1.13.0"
 rust-gmp = "0.5.0"
