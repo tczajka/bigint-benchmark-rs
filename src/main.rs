@@ -11,7 +11,7 @@ fn main() {
         .arg(
             Arg::with_name("lib")
                 .long("lib")
-                .possible_values(&["ibig", "num-bigint", "ramp", "rug", "rust-gmp"])
+                .possible_values(&["ibig", "num-bigint", "ramp", "rug", "rust-gmp", "malachite"])
                 .multiple(true)
                 .number_of_values(1)
                 .required(true)
@@ -118,6 +118,7 @@ fn run_task(lib: &str, task: &str, n: u32, iter: u32) -> (String, Duration) {
         "ramp" => run_task_using::<ramp::Int>(task, n, iter),
         "rug" => run_task_using::<rug::Integer>(task, n, iter),
         "rust-gmp" => run_task_using::<gmp::mpz::Mpz>(task, n, iter),
+        "malachite" => run_task_using::<malachite_nz::natural::Natural>(task, n, iter),
         _ => unreachable!(),
     }
 }

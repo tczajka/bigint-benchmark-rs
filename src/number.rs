@@ -91,3 +91,17 @@ impl Number for gmp::mpz::Mpz {
         self * rhs
     }
 }
+
+impl Number for malachite_nz::natural::Natural {
+    fn pow(&self, exp: u32) -> Self {
+        malachite_base::num::arithmetic::traits::Pow::pow(self, exp.into())
+    }
+
+    fn to_hex(&self) -> String {
+        malachite_base::strings::ToLowerHexString::to_lower_hex_string(self)
+    }
+
+    fn mul_ref(&self, rhs: &Self) -> Self {
+        self * rhs
+    }
+}
