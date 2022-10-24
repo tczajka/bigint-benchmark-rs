@@ -1,6 +1,6 @@
 [package]
 name = "bigint-benchmark"
-version = "0.2.2"
+version = "0.3.0"
 authors = ["Tomek Czajka <tczajka@gmail.com>"]
 edition = "2018"
 description = "Benchmarks for big integer implementations"
@@ -15,8 +15,6 @@ readme = "README.md"
 clap = "2.33.3"
 ibig = "0.3.4"
 num-bigint = "0.4.3"
-ramp = "0.7.0"
-rug = "1.16.0"
+rug = "1.17.0"
 rust-gmp = "0.5.0"
-malachite-base = "0.2.2"
-malachite-nz = "0.2.2"
+malachite = "0.3.0"

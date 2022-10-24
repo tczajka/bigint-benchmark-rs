@@ -50,20 +50,6 @@ impl Number for num_bigint::BigUint {
     }
 }
 
-impl Number for ramp::Int {
-    fn pow(&self, exp: u32) -> Self {
-        self.pow(exp as usize)
-    }
-
-    fn to_hex(&self) -> String {
-        format!("{:x}", self)
-    }
-
-    fn mul_ref(&self, rhs: &Self) -> Self {
-        self * rhs
-    }
-}
-
 impl Number for rug::Integer {
     fn pow(&self, exp: u32) -> Self {
         rug::ops::Pow::pow(self, exp).into()
@@ -92,13 +78,13 @@ impl Number for gmp::mpz::Mpz {
     }
 }
 
-impl Number for malachite_nz::natural::Natural {
+impl Number for malachite::natural::Natural {
     fn pow(&self, exp: u32) -> Self {
-        malachite_base::num::arithmetic::traits::Pow::pow(self, exp.into())
+        malachite::num::arithmetic::traits::Pow::pow(self, exp.into())
     }
 
     fn to_hex(&self) -> String {
-        malachite_base::strings::ToLowerHexString::to_lower_hex_string(self)
+        malachite::strings::ToLowerHexString::to_lower_hex_string(self)
     }
 
     fn mul_ref(&self, rhs: &Self) -> Self {
