@@ -23,6 +23,9 @@ jobs:
       - name: Update Rust
         run: rustup update
 
+      - name: Install rug dependencies
+        run: sudo apt-get install diffutils gcc m4 make
+
       - name: Lint with Clippy
         run: cargo clippy --verbose --all-features -- -D warnings
 
@@ -51,7 +54,7 @@ jobs:
             args: "--task fib -n 100000000"
           - name: "fib_hex 100M"
             args: "--task fib_hex -n 100000000"
-    name: Benchmark --- ${{ matrix.name }}
+    name: "Benchmark: ${{ matrix.name }}"
     runs-on: ubuntu-latest
     defaults:
       run:
