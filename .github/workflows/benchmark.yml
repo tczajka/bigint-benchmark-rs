@@ -68,5 +68,8 @@ jobs:
         with:
           name: binary
 
+      - name: Set binary permissions
+        run: sudo chmod +rwx ./bigint-benchmark
+
       - name: Run benchmark
         run: ./bigint-benchmark ${{ matrix.args }} --lib dashu --lib ibig --lib malachite --lib num-bigint --lib rug benchmark
