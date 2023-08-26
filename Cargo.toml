@@ -16,8 +16,8 @@ lto = true
 
 [dependencies]
 clap = { version = "4.4.0", features = ["cargo"] }
+dashu = "0.3.1"
 ibig = "0.3.6"
+malachite = "0.3.2"
 num-bigint = "0.4.4"
 rug = "1.20.1"
-malachite = "0.3.2"
-dashu = "0.3.1"

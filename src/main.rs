@@ -1,10 +1,12 @@
+use std::io::Write;
+use std::time::{Duration, Instant};
 use clap::{Arg, ArgAction, Command, command, value_parser};
 use number::Number;
-use std::time::{Duration, Instant};
 
 mod digits_of_e;
 mod fib;
 mod number;
+
 
 fn main() {
     let argv = command!()
@@ -17,7 +19,7 @@ fn main() {
                 .short('l')
                 .long("lib")
                 .help("Library to use")
-                .value_parser(["ibig", "num-bigint", "rug", "malachite", "dashu"])
+                .value_parser(["dashu", "ibig", "malachite", "num-bigint", "rug"])
                 .required(true)
                 .action(ArgAction::Append)
         )
@@ -47,7 +49,8 @@ fn main() {
         ])
         .get_matches();
 
-    let libs: Vec<&str> = argv.get_many::<String>("lib").unwrap().map(|v| v.as_str()).collect();
+    let mut libs: Vec<&str> = argv.get_many::<String>("lib").unwrap().map(|v| v.as_str()).collect();
+    libs.sort();
     let task = argv.get_one::<String>("task").unwrap().as_str();
     let n = *argv.get_one::<u32>("n").unwrap();
 
@@ -61,18 +64,19 @@ fn main() {
 fn command_print(libs: &[&str], task: &str, n: u32) {
     let mut answer: Option<String> = None;
     for lib_name in libs {
-        let (a, _) = run_task(lib_name, task, n, 1);
+        let a = run_task(lib_name, task, n);
         match &answer {
             None => {
-                println!("answer = {}", a);
-                println!("{:10} agrees", lib_name);
+                println!("Answer = {}", a);
+                println!("Results:");
+                println!("    {:<10} {:>10}", lib_name, "agrees");
                 answer = Some(a);
             }
             Some(ans) => {
                 if *ans == a {
-                    println!("{:10} agrees", lib_name);
+                    println!("    {:<10} {:>10}", lib_name, "agrees");
                 } else {
-                    println!("{} disagrees!", lib_name);
+                    println!("    {:<10} {:>10}", lib_name, "disagrees");
                 }
             }
         }
@@ -82,69 +86,66 @@ fn command_print(libs: &[&str], task: &str, n: u32) {
 fn command_benchmark(libs: &[&str], task: &str, n: u32) {
     let mut answer: Option<String> = None;
     let mut results: Vec<(&str, Duration)> = Vec::new();
+
+    println!("Benchmarking:");
     for lib_name in libs {
-        println!("{}", lib_name);
-        // Take the median of 5 attempts, each attempt at least 10 seconds.
-        let mut durations: Vec<Duration> = Vec::new();
-        for sample_number in 0..5 {
-            let mut iter = 0;
-            let mut duration = Duration::from_secs(0);
-            while duration < Duration::from_secs(10) {
-                let i = iter.max(1);
-                let (a, d) = run_task(lib_name, task, n, i);
-                match &answer {
-                    None => answer = Some(a),
-                    Some(ans) => assert_eq!(*ans, a),
-                }
-                iter += i;
-                duration += d;
+        print!("    {:<10}", lib_name);
+        std::io::stdout().flush().unwrap();
+
+        // Run benchmark for 60 seconds, or at least 5 iterations
+        // Take the minimum duration of all iterations as the result
+
+        let mut min_duration = Duration::MAX;
+        let mut iterations: u64 = 0;
+
+        let lib_start_time = Instant::now();
+        let limit = Duration::from_secs(60);
+
+        while lib_start_time.elapsed() < limit || iterations < 5 {
+            let start_time = Instant::now();
+
+            let a = run_task(lib_name, task, n);
+            match &answer {
+                None => answer = Some(a),
+                Some(ans) => assert_eq!(*ans, a),
             }
-            let duration = duration / iter;
-            println!(
-                "Attempt {}: {} iterations {} ms",
-                sample_number,
-                iter,
-                duration.as_millis()
-            );
-            durations.push(duration);
+
+            let elapsed = start_time.elapsed();
+            if elapsed < min_duration {
+                min_duration = elapsed;
+            }
+
+            iterations += 1;
         }
-        durations.sort();
-        let duration = durations[0];
-        results.push((lib_name, duration));
+
+        println!(" ({} iterations)", iterations);
+
+        results.push((lib_name, min_duration));
     }
+
+    println!("Results:");
     results.sort_by_key(|&(_, d)| d);
-    println!("Results");
     for (lib_name, duration) in results {
-        println!("{:10} {} ms", lib_name, duration.as_millis());
+        println!("    {:<10} {} s", lib_name, duration.as_secs_f64());
     }
 }
 
-fn run_task(lib: &str, task: &str, n: u32, iter: u32) -> (String, Duration) {
+fn run_task(lib: &str, task: &str, n: u32) -> String {
     match lib {
-        "ibig" => run_task_using::<ibig::UBig>(task, n, iter),
-        "num-bigint" => run_task_using::<num_bigint::BigUint>(task, n, iter),
-        "rug" => run_task_using::<rug::Integer>(task, n, iter),
-        "malachite" => run_task_using::<malachite::natural::Natural>(task, n, iter),
-        "dashu" => run_task_using::<dashu::Natural>(task, n, iter),
+        "dashu" => run_task_using::<dashu::Natural>(task, n),
+        "ibig" => run_task_using::<ibig::UBig>(task, n),
+        "malachite" => run_task_using::<malachite::natural::Natural>(task, n),
+        "num-bigint" => run_task_using::<num_bigint::BigUint>(task, n),
+        "rug" => run_task_using::<rug::Integer>(task, n),
         _ => unreachable!(),
     }
 }
 
-fn run_task_using<T: Number>(task: &str, n: u32, iter: u32) -> (String, Duration) {
-    let mut answer = None;
-    let start_time = Instant::now();
-    for _ in 0..iter {
-        let a = match task {
-            "e" => digits_of_e::calculate::<T>(n),
-            "fib" => fib::calculate_decimal::<T>(n),
-            "fib_hex" => fib::calculate_hex::<T>(n),
-            _ => unreachable!(),
-        };
-        match &answer {
-            None => answer = Some(a),
-            Some(ans) => assert_eq!(a, *ans),
-        }
+fn run_task_using<T: Number>(task: &str, n: u32) -> String {
+    match task {
+        "e" => digits_of_e::calculate::<T>(n),
+        "fib" => fib::calculate_decimal::<T>(n),
+        "fib_hex" => fib::calculate_hex::<T>(n),
+        _ => unreachable!(),
     }
-    let time = start_time.elapsed();
-    (answer.unwrap(), time)
 }
