@@ -1,0 +1,69 @@
+name: Benchmark
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Update Rust
+        run: rustup update
+
+      - name: Lint with Clippy
+        run: cargo clippy --verbose --all-features -- -D warnings
+
+      - name: Build
+        run: cargo build --release --verbose
+
+      - name: Upload binary
+        uses: actions/upload-artifact@v3
+        with:
+          name: binary
+          path: target/release/bigint-benchmark
+
+  benchmark:
+    strategy:
+      matrix:
+        include:
+          - name: "e 100k"
+            args: "--task e -n 100000"
+          - name: "e 1M"
+            args: "--task e -n 1000000"
+          - name: "e 10M"
+            args: "--task e -n 10000000"
+          - name: "fib 10M"
+            args: "--task fib -n 10000000"
+          - name: "fib 100M"
+            args: "--task fib -n 100000000"
+          - name: "fib_hex 100M"
+            args: "--task fib_hex -n 100000000"
+    name: Benchmark --- ${{ matrix.name }}
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
+
+    needs: build
+
+    steps:
+      - name: Download binary
+        uses: actions/download-artifact@v3
+        with:
+          name: binary
+
+      - name: Run benchmark
+        run: ./bigint-benchmark ${{ matrix.args }} --lib dashu --lib ibig --lib malachite --lib num-bigint --lib rug benchmark
