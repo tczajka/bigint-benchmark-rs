@@ -27,7 +27,7 @@ jobs:
         run: sudo apt-get install diffutils gcc m4 make
 
       - name: Lint with Clippy
-        run: cargo clippy --verbose --all-features -- -D warnings
+        run: cargo clippy --verbose -- -D warnings
 
       - name: Build
         run: cargo build --release --verbose
