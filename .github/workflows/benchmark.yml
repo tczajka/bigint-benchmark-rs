@@ -9,8 +9,8 @@ env:
   CARGO_TERM_COLOR: always
 
 jobs:
-  build:
-    name: Build
+  build-linux:
+    name: Build Linux
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -38,6 +38,40 @@ jobs:
           name: binary
           path: target/release/bigint-benchmark
 
+  build-windows:
+    name: Build Windows
+    runs-on: windows-latest
+    defaults:
+      run:
+        shell: msys2
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Configure Rust
+        run: |
+          rustup update
+          rustup toolchain install stable-x86_64-pc-windows-gnu
+          rustup default stable-x86_64-pc-windows-gnu
+
+      - name: Install rug dependencies
+        run: |
+          pacman -S pacman-mirrors
+          pacman -S diffutils m4 make mingw-w64-x86_64-gcc
+
+      - name: Lint with Clippy
+        run: cargo clippy -- -D warnings
+
+      - name: Build
+        run: cargo build --release
+
+      - name: Upload binary
+        uses: actions/upload-artifact@v3
+        with:
+          name: binary-win
+          path: target/release/bigint-benchmark
+
   benchmark:
     strategy:
       matrix:
@@ -60,7 +94,7 @@ jobs:
       run:
         shell: bash
 
-    needs: build
+    needs: build-linux
 
     steps:
       - name: Download binary
