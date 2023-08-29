@@ -60,20 +60,22 @@ jobs:
             m4
             make
             mingw-w64-x86_64-gcc
+            mingw-w64-x86_64-rust            
 
       - name: Configure Rust
+        shell: msys2 {0}
         run: |
           rustup update
           rustup toolchain install stable-x86_64-pc-windows-gnu
           rustup default stable-x86_64-pc-windows-gnu
 
       - name: Lint with Clippy
-        run: cargo clippy -- -D warnings
         shell: msys2 {0}
+        run: cargo clippy -- -D warnings
 
       - name: Build
-        run: cargo build --release
         shell: msys2 {0}
+        run: cargo build --release
 
       - name: Upload binary
         uses: actions/upload-artifact@v3
