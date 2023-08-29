@@ -38,6 +38,32 @@ jobs:
           name: binary-linux
           path: target/release/bigint-benchmark
 
+  build-macos:
+    name: Build (macOS)
+    runs-on: macos-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Update Rust
+        run: rustup update
+
+      - name: Install rug dependencies
+        run: xcode-select --install
+
+      - name: Lint with Clippy
+        run: cargo clippy -- -D warnings
+
+      - name: Build
+        run: cargo build --release
+
+      - name: Upload binary
+        uses: actions/upload-artifact@v3
+        with:
+          name: binary-macos
+          path: target/release/bigint-benchmark
+
   build-windows:
     name: Build (windows)
     runs-on: windows-latest
@@ -112,6 +138,39 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: binary-linux
+
+      - name: Set binary permissions
+        run: sudo chmod +rwx ./bigint-benchmark
+
+      - name: Run benchmark
+        run: ./bigint-benchmark ${{ matrix.args }} --lib dashu --lib ibig --lib malachite --lib num-bigint --lib rug benchmark
+
+  benchmark-macos:
+    strategy:
+      matrix:
+        include:
+          - name: "e 100k"
+            args: "--task e -n 100000"
+          - name: "e 1M"
+            args: "--task e -n 1000000"
+          - name: "e 10M"
+            args: "--task e -n 10000000"
+          - name: "fib 10M"
+            args: "--task fib -n 10000000"
+          - name: "fib 100M"
+            args: "--task fib -n 100000000"
+          - name: "fib_hex 100M"
+            args: "--task fib_hex -n 100000000"
+    name: "Benchmark (macOS): ${{ matrix.name }}"
+    runs-on: macos-latest
+
+    needs: build-macos
+
+    steps:
+      - name: Download binary
+        uses: actions/download-artifact@v3
+        with:
+          name: binary-macos
 
       - name: Set binary permissions
         run: sudo chmod +rwx ./bigint-benchmark
