@@ -10,7 +10,7 @@ env:
 
 jobs:
   build-linux:
-    name: Build Linux
+    name: Build (linux)
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -35,19 +35,31 @@ jobs:
       - name: Upload binary
         uses: actions/upload-artifact@v3
         with:
-          name: binary
+          name: binary-linux
           path: target/release/bigint-benchmark
 
   build-windows:
-    name: Build Windows
+    name: Build (windows)
     runs-on: windows-latest
     defaults:
       run:
-        shell: msys2
+        shell: bash
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
+
+      - name: Setup MSYS2
+        uses: msys2/setup-msys2@v2
+        with:
+          msystem: mingw64
+          update: true
+          install: >-
+            pacman-mirrors  
+            diffutils
+            m4
+            make
+            mingw-w64-x86_64-gcc
 
       - name: Configure Rust
         run: |
@@ -55,24 +67,21 @@ jobs:
           rustup toolchain install stable-x86_64-pc-windows-gnu
           rustup default stable-x86_64-pc-windows-gnu
 
-      - name: Install rug dependencies
-        run: |
-          pacman -S pacman-mirrors
-          pacman -S diffutils m4 make mingw-w64-x86_64-gcc
-
       - name: Lint with Clippy
         run: cargo clippy -- -D warnings
+        shell: msys2 {0}
 
       - name: Build
         run: cargo build --release
+        shell: msys2 {0}
 
       - name: Upload binary
         uses: actions/upload-artifact@v3
         with:
-          name: binary-win
-          path: target/release/bigint-benchmark
+          name: binary-windows
+          path: target/release/bigint-benchmark.exe
 
-  benchmark:
+  benchmark-linux:
     strategy:
       matrix:
         include:
@@ -88,7 +97,7 @@ jobs:
             args: "--task fib -n 100000000"
           - name: "fib_hex 100M"
             args: "--task fib_hex -n 100000000"
-    name: "Benchmark: ${{ matrix.name }}"
+    name: "Benchmark (linux): ${{ matrix.name }}"
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -100,10 +109,43 @@ jobs:
       - name: Download binary
         uses: actions/download-artifact@v3
         with:
-          name: binary
+          name: binary-linux
 
       - name: Set binary permissions
         run: sudo chmod +rwx ./bigint-benchmark
+
+      - name: Run benchmark
+        run: ./bigint-benchmark ${{ matrix.args }} --lib dashu --lib ibig --lib malachite --lib num-bigint --lib rug benchmark
+
+  benchmark-windows:
+    strategy:
+      matrix:
+        include:
+          - name: "e 100k"
+            args: "--task e -n 100000"
+          - name: "e 1M"
+            args: "--task e -n 1000000"
+          - name: "e 10M"
+            args: "--task e -n 10000000"
+          - name: "fib 10M"
+            args: "--task fib -n 10000000"
+          - name: "fib 100M"
+            args: "--task fib -n 100000000"
+          - name: "fib_hex 100M"
+            args: "--task fib_hex -n 100000000"
+    name: "Benchmark (windows): ${{ matrix.name }}"
+    runs-on: windows-latest
+    defaults:
+      run:
+        shell: bash
+
+    needs: build-windows
+
+    steps:
+      - name: Download binary
+        uses: actions/download-artifact@v3
+        with:
+          name: binary-windows
 
       - name: Run benchmark
         run: ./bigint-benchmark ${{ matrix.args }} --lib dashu --lib ibig --lib malachite --lib num-bigint --lib rug benchmark
