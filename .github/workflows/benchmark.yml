@@ -60,10 +60,9 @@ jobs:
             m4
             make
             mingw-w64-x86_64-gcc
-            mingw-w64-x86_64-rust            
+          path-type: inherit
 
       - name: Configure Rust
-        shell: msys2 {0}
         run: |
           rustup update
           rustup toolchain install stable-x86_64-pc-windows-gnu
