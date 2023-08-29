@@ -49,9 +49,6 @@ jobs:
       - name: Update Rust
         run: rustup update
 
-      - name: Install rug dependencies
-        run: xcode-select --install
-
       - name: Lint with Clippy
         run: cargo clippy -- -D warnings
 
