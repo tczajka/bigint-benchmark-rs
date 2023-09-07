@@ -1,4 +1,3 @@
-use std::io::Write;
 use std::time::{Duration, Instant};
 use clap::{Arg, ArgAction, Command, command, value_parser};
 use number::Number;
@@ -86,39 +85,34 @@ fn command_print(libs: &[&str], task: &str, n: u32) {
 fn command_benchmark(libs: &[&str], task: &str, n: u32) {
     let mut answer: Option<String> = None;
     let mut results: Vec<(&str, Duration)> = Vec::new();
+    const RUN_LIMIT: Duration = Duration::from_secs(10);
 
     println!("Benchmarking:");
     for lib_name in libs {
-        print!("    {:<10}", lib_name);
-        std::io::stdout().flush().unwrap();
+        println!("    {:<10}", lib_name);
 
-        // Run benchmark for 60 seconds, or at least 5 iterations
-        // Take the minimum duration of all iterations as the result
-
+        // Run benchmark for each library 5 times for at least 10 seconds.
+        // Calculate the result for each run by dividing the time it took to finish by the number of iterations in that run.
+        // The fastest of the 5 runs is used as the result.
+        
         let mut min_duration = Duration::MAX;
-        let mut iterations: u64 = 0;
-
-        let lib_start_time = Instant::now();
-        let limit = Duration::from_secs(60);
-
-        while lib_start_time.elapsed() < limit || iterations < 5 {
+        for attempt in 1..=5 {
+            let mut iterations: u32 = 0;
             let start_time = Instant::now();
-
-            let a = run_task(lib_name, task, n);
-            match &answer {
-                None => answer = Some(a),
-                Some(ans) => assert_eq!(*ans, a),
+            while start_time.elapsed() < RUN_LIMIT {
+                let run_ans = run_task(lib_name, task, n);
+                match &answer {
+                    None => answer = Some(run_ans),
+                    Some(ans) => assert_eq!(*ans, run_ans),
+                }
+                iterations += 1;
             }
-
-            let elapsed = start_time.elapsed();
-            if elapsed < min_duration {
-                min_duration = elapsed;
+            let result = start_time.elapsed() / iterations;
+            if result < min_duration {
+                min_duration = result;
             }
-
-            iterations += 1;
+            println!("        attempt {}: {} s ({} iteration{})", attempt, result.as_secs_f64(), iterations, if iterations > 1 {"s"} else {""});
         }
-
-        println!(" ({} iterations)", iterations);
 
         results.push((lib_name, min_duration));
     }
@@ -130,6 +124,7 @@ fn command_benchmark(libs: &[&str], task: &str, n: u32) {
     }
 }
 
+#[inline(always)]
 fn run_task(lib: &str, task: &str, n: u32) -> String {
     match lib {
         "dashu" => run_task_using::<dashu::Natural>(task, n),
@@ -141,6 +136,7 @@ fn run_task(lib: &str, task: &str, n: u32) -> String {
     }
 }
 
+#[inline(always)]
 fn run_task_using<T: Number>(task: &str, n: u32) -> String {
     match task {
         "e" => digits_of_e::calculate::<T>(n),

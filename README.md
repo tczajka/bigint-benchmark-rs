@@ -2,8 +2,9 @@
 
 Benchmarks for Rust big integer implementations.
 
-Each benchmark is run for 60 seconds with at least 5 iterations (even if they take more than 60 seconds).
-The fastest attempt is used as the result.
+Benchmark for each library is run 5 times for at least 10 seconds.
+Result for each run is obtained by dividing the time it took to finish by the number of iterations in that run.
+The fastest of the 5 runs is used as the result.
 
 ## Libraries
 
@@ -11,9 +12,9 @@ The fastest attempt is used as the result.
 |---------------------------------------------------|---------|-------------------|------------------------------------------------------------------------------------------|
 | [dashu](https://crates.io/crates/dashu)           | 0.3.1   | MIT or Apache 2.0 | Pure Rust, no_std                                                                        |
 | [ibig](https://crates.io/crates/ibig)             | 0.3.6   | MIT or Apache 2.0 | Pure Rust, no_std                                                                        |
-| [malachite](https://crates.io/crates/malachite)   | 0.3.2   | LGPL 3.0          | Pure Rust, derived from [GMP](https://gmplib.org) and [FLINT](https://www.flintlib.org/) |
+| [malachite](https://crates.io/crates/malachite)   | 0.4.0   | LGPL 3.0          | Pure Rust, derived from [GMP](https://gmplib.org) and [FLINT](https://www.flintlib.org/) |
 | [num-bigint](https://crates.io/crates/num-bigint) | 0.4.4   | MIT or Apache 2.0 | Pure Rust, no_std                                                                        |
-| [rug](https://crates.io/crates/rug)               | 1.20.1  | LGPL 3.0          | Links to [GMP](https://gmplib.org/)                                                      |
+| [rug](https://crates.io/crates/rug)               | 1.21.0  | LGPL 3.0          | Links to [GMP](https://gmplib.org/)                                                      |
 
 ## Results
 
