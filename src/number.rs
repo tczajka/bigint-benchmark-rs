@@ -64,20 +64,6 @@ impl Number for rug::Integer {
     }
 }
 
-impl Number for gmp::mpz::Mpz {
-    fn pow(&self, exp: u32) -> Self {
-        self.pow(exp)
-    }
-
-    fn to_hex(&self) -> String {
-        self.to_str_radix(16)
-    }
-
-    fn mul_ref(&self, rhs: &Self) -> Self {
-        self * rhs
-    }
-}
-
 impl Number for malachite::natural::Natural {
     fn pow(&self, exp: u32) -> Self {
         malachite::num::arithmetic::traits::Pow::pow(self, exp.into())
