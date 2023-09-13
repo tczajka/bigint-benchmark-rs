@@ -13,8 +13,8 @@ readme = "README.md"
 
 [dependencies]
 clap = "2.33.3"
-ibig = "0.3.4"
-num-bigint = "0.4.3"
-rug = "1.17.0"
+ibig = "0.3.6"
+num-bigint = "0.4.4"
+rug = "1.22.0"
 rust-gmp = "0.5.0"
-malachite = "0.3.0"
+malachite = "0.4.0"
