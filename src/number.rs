@@ -91,3 +91,17 @@ impl Number for malachite::natural::Natural {
         self * rhs
     }
 }
+
+impl Number for dashu::Natural {
+    fn pow(&self, exp: u32) -> Self {
+        self.pow(exp as usize)
+    }
+
+    fn to_hex(&self) -> String {
+        format!("{:x}", self)
+    }
+
+    fn mul_ref(&self, rhs: &Self) -> Self {
+        self * rhs
+    }
+}
