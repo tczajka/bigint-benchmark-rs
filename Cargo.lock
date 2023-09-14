@@ -50,7 +50,6 @@ dependencies = [
  "malachite",
  "num-bigint",
  "rug",
- "rust-gmp",
 ]
 
 [[package]]
@@ -477,16 +476,6 @@ dependencies = [
  "az",
  "gmp-mpfr-sys",
  "libc",
-]
-
-[[package]]
-name = "rust-gmp"
-version = "0.5.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "c3ddf28998d5730b96a9fe188557953de503d77ff403ae175ad1417921e5d906"
-dependencies = [
- "libc",
- "num-traits 0.1.43",
 ]
 
 [[package]]

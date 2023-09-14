@@ -32,33 +32,29 @@ Times in seconds.
 
 Calculate 100 digits of `e` and compare answers:
 ```
-$ bigint-benchmark --task e --lib ibig --lib num-bigint --lib ramp --lib rug --lib rust-gmp --lib malachite --lib dashu -n 100 print                                             
+$ bigint-benchmark --task e --lib ibig --lib num-bigint --lib rug --lib malachite --lib dashu -n 100 print                                             
 answer = 2.718281828459045235360287471352662497757247093699959574966967627724076630353547594571382178525166427
 ibig       agrees
 num-bigint agrees
-ramp       agrees
 rug        agrees
-rust-gmp   agrees
 malachite  agrees
 dashu      agrees
 ```
 
 Calculate the 500-th Fibonacci number and compare answers:
 ```
-$ bigint-benchmark --task fib --lib ibig --lib num-bigint --lib ramp --lib rug --lib rust-gmp --lib malachite --lib dashu -n 500 print                                            
+$ bigint-benchmark --task fib --lib ibig --lib num-bigint --lib rug --lib malachite --lib dashu -n 500 print                                            
 answer = 139423224561697880139724382870407283950070256587697307264108962948325571622863290691557658876222521294125
 ibig       agrees
 num-bigint agrees
-ramp       agrees
 rug        agrees
-rust-gmp   agrees
 malachite  agrees
 dashu      agrees
 ```
 
 Benchmark calculating a million digits of e:
 ```
-$ bigint-benchmark --task e --lib ibig --lib num-bigint --lib ramp --lib rug --lib rust-gmp --lib malachite --lib dashu -n 1000000 benchmark
+$ bigint-benchmark --task e --lib ibig --lib num-bigint --lib rug --lib malachite --lib dashu -n 1000000 benchmark
 ```
 
 ## Tasks
