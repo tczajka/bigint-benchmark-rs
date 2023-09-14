@@ -50,7 +50,6 @@ dependencies = [
  "malachite",
  "num-bigint",
  "rug",
- "rust-gmp",
 ]
 
 [[package]]
@@ -249,7 +248,7 @@ checksum = "e5c524ff730eb3edb19b3852a278f5db94f3f0c1589a922fe59c163529009ded"
 dependencies = [
  "cfg-if",
  "const_fn_assert",
- "num-traits 0.2.14",
+ "num-traits",
  "rand 0.8.4",
  "static_assertions",
 ]
@@ -329,7 +328,7 @@ checksum = "f93ab6289c7b344a8a9f60f88d80aa20032336fe78da341afc91c8a2341fc75f"
 dependencies = [
  "autocfg",
  "num-integer",
- "num-traits 0.2.14",
+ "num-traits",
 ]
 
 [[package]]
@@ -470,16 +469,6 @@ dependencies = [
  "az",
  "gmp-mpfr-sys",
  "libc",
-]
-
-[[package]]
-name = "rust-gmp"
-version = "0.5.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "c3ddf28998d5730b96a9fe188557953de503d77ff403ae175ad1417921e5d906"
-dependencies = [
- "libc",
- "num-traits 0.1.43",
 ]
 
 [[package]]
