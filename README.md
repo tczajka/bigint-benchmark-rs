@@ -13,6 +13,8 @@ The fastest attempt is used as the result.
 | [malachite](https://crates.io/crates/malachite)       | 0.4.0   | LGPL 3.0 | Pure Rust, derived from [GMP](https://gmplib.org) and [FLINT](https://www.flintlib.org/) |
 | [ibig](https://crates.io/crates/ibig)                 | 0.3.6   | MIT or Apache 2.0 | Pure Rust, no_std                            |
 | [num-bigint](https://crates.io/crates/num-bigint)     | 0.4.4   | MIT or Apache 2.0 | Pure Rust, no_std                            |
+| [dashu](https://crates.io/crates/dashu)               | 0.4.0   | MIT or Apache 2.0 | Pure Rust, no_std                            |
+
 
 ## Results
 
@@ -22,6 +24,7 @@ The fastest attempt is used as the result.
 | [malachite](https://crates.io/crates/malachite)       | 0.043  |  0.929 |   15.798 | 1.197   | 21.473   | 3.270        |
 | [ibig](https://crates.io/crates/ibig)                 | 0.031  |  0.978 |   31.606 | 1.252   | 40.075   | 8.485        |
 | [num-bigint](https://crates.io/crates/num-bigint)     | 0.086  |  6.776 |  656.515 | 10.271  | 950.146  | 8.967        |
+| [dashu](https://crates.io/crates/dashu)               | x.xxx  |  x.xxx |    x.xxx |  x.xxx  |   x.xxx  | x.xxx        |
 
 Times in seconds.
 
@@ -29,7 +32,7 @@ Times in seconds.
 
 Calculate 100 digits of `e` and compare answers:
 ```
-$ bigint-benchmark --task e --lib ibig --lib num-bigint --lib ramp --lib rug --lib rust-gmp --lib malachite -n 100 print                                             
+$ bigint-benchmark --task e --lib ibig --lib num-bigint --lib ramp --lib rug --lib rust-gmp --lib malachite --lib dashu -n 100 print                                             
 answer = 2.718281828459045235360287471352662497757247093699959574966967627724076630353547594571382178525166427
 ibig       agrees
 num-bigint agrees
@@ -37,11 +40,12 @@ ramp       agrees
 rug        agrees
 rust-gmp   agrees
 malachite  agrees
+dashu      agrees
 ```
 
 Calculate the 500-th Fibonacci number and compare answers:
 ```
-$ bigint-benchmark --task fib --lib ibig --lib num-bigint --lib ramp --lib rug --lib rust-gmp --lib malachite -n 500 print                                            
+$ bigint-benchmark --task fib --lib ibig --lib num-bigint --lib ramp --lib rug --lib rust-gmp --lib malachite --lib dashu -n 500 print                                            
 answer = 139423224561697880139724382870407283950070256587697307264108962948325571622863290691557658876222521294125
 ibig       agrees
 num-bigint agrees
@@ -49,11 +53,12 @@ ramp       agrees
 rug        agrees
 rust-gmp   agrees
 malachite  agrees
+dashu      agrees
 ```
 
 Benchmark calculating a million digits of e:
 ```
-$ bigint-benchmark --task e --lib ibig --lib num-bigint --lib ramp --lib rug --lib rust-gmp --lib malachite -n 1000000 benchmark
+$ bigint-benchmark --task e --lib ibig --lib num-bigint --lib ramp --lib rug --lib rust-gmp --lib malachite --lib dashu -n 1000000 benchmark
 ```
 
 ## Tasks

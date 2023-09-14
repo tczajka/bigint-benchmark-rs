@@ -2,7 +2,7 @@
 name = "bigint-benchmark"
 version = "0.3.0"
 authors = ["Tomek Czajka <tczajka@gmail.com>"]
-edition = "2018"
+edition = "2021"
 description = "Benchmarks for big integer implementations"
 keywords = ["bigint", "bignum", "mathematics", "benchmark"]
 categories = ["mathematics"]
@@ -18,3 +18,4 @@ num-bigint = "0.4.4"
 rug = "1.22.0"
 rust-gmp = "0.5.0"
 malachite = "0.4.0"
+dashu = "0.4.0"
