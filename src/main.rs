@@ -1,4 +1,4 @@
-use clap::{Arg, ArgAction, Command, command, value_parser};
+use clap::{command, value_parser, Arg, ArgAction, Command};
 use number::Number;
 use std::time::{Duration, Instant};
 
@@ -19,7 +19,7 @@ fn main() {
                 .help("Library to use")
                 .value_parser(["dashu", "ibig", "malachite", "num-bigint", "rug"])
                 .required(true)
-                .action(ArgAction::Append)
+                .action(ArgAction::Append),
         )
         .arg(
             Arg::new("task")
@@ -40,15 +40,16 @@ fn main() {
                 .required(true),
         )
         .subcommands([
-            Command::new("print")
-                .about("Print the answer and check that all libraries agree"),
-            Command::new("benchmark")
-                .about("Benchmark the libraries"),
+            Command::new("print").about("Print the answer and check that all libraries agree"),
+            Command::new("benchmark").about("Benchmark the libraries"),
         ])
         .get_matches();
 
-    let mut libs: Vec<&str> = argv.get_many::<String>("lib").unwrap().map(|v| v.as_str()).collect();
-    libs.sort();
+    let libs: Vec<&str> = argv
+        .get_many::<String>("lib")
+        .unwrap()
+        .map(|v| v.as_str())
+        .collect();
     let task = argv.get_one::<String>("task").unwrap().as_str();
     let n = *argv.get_one::<u32>("n").unwrap();
 
