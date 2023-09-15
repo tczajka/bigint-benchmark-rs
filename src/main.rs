@@ -1,4 +1,4 @@
-use clap::{App, AppSettings, Arg, SubCommand};
+use clap::{Arg, ArgAction, Command, command, value_parser};
 use number::Number;
 use std::time::{Duration, Instant};
 
@@ -7,50 +7,59 @@ mod fib;
 mod number;
 
 fn main() {
-    let args = App::new("Bigint benchmarks")
+    let argv = command!()
+        .subcommand_required(true)
+        .propagate_version(true)
+        .arg_required_else_help(true)
         .arg(
-            Arg::with_name("lib")
+            Arg::new("lib")
+                .value_name("lib")
+                .short('l')
                 .long("lib")
-                .possible_values(&["ibig", "num-bigint", "rug", "malachite", "dashu"])
-                .multiple(true)
-                .number_of_values(1)
+                .help("Library to use")
+                .value_parser(["dashu", "ibig", "malachite", "num-bigint", "rug"])
                 .required(true)
-                .min_values(1),
+                .action(ArgAction::Append)
         )
         .arg(
-            Arg::with_name("task")
+            Arg::new("task")
+                .value_name("task")
+                .short('t')
                 .long("task")
-                .takes_value(true)
-                .possible_values(&["e", "fib", "fib_hex"])
+                .help("Task to run")
+                .value_parser(["e", "fib", "fib_hex"])
                 .required(true),
         )
         .arg(
-            Arg::with_name("n")
-                .short("n")
-                .takes_value(true)
+            Arg::new("n")
+                .value_name("n")
+                .short('n')
+                .long("num")
+                .help("Number of elements to calculate")
+                .value_parser(value_parser!(u32))
                 .required(true),
         )
-        .subcommand(SubCommand::with_name("print"))
-        .subcommand(SubCommand::with_name("benchmark"))
-        .settings(&[AppSettings::SubcommandRequired])
+        .subcommands([
+            Command::new("print")
+                .about("Print the answer and check that all libraries agree"),
+            Command::new("benchmark")
+                .about("Benchmark the libraries"),
+        ])
         .get_matches();
 
-    let libs: Vec<String> = args
-        .values_of("lib")
-        .unwrap()
-        .map(|s| s.to_string())
-        .collect();
-    let task = args.value_of("task").unwrap();
-    let n: u32 = args.value_of("n").unwrap().parse().expect("invalid n");
+    let mut libs: Vec<&str> = argv.get_many::<String>("lib").unwrap().map(|v| v.as_str()).collect();
+    libs.sort();
+    let task = argv.get_one::<String>("task").unwrap().as_str();
+    let n = *argv.get_one::<u32>("n").unwrap();
 
-    match args.subcommand() {
-        ("print", _) => command_print(&libs, task, n),
-        ("benchmark", _) => command_benchmark(&libs, task, n),
-        _ => unreachable!(),
+    match argv.subcommand() {
+        Some(("print", _)) => command_print(&libs, task, n),
+        Some(("benchmark", _)) => command_benchmark(&libs, task, n),
+        _ => unreachable!("subcommand required"),
     }
 }
 
-fn command_print(libs: &[String], task: &str, n: u32) {
+fn command_print(libs: &[&str], task: &str, n: u32) {
     let mut answer: Option<String> = None;
     for lib_name in libs {
         let (a, _) = run_task(lib_name, task, n, 1);
@@ -71,9 +80,9 @@ fn command_print(libs: &[String], task: &str, n: u32) {
     }
 }
 
-fn command_benchmark(libs: &[String], task: &str, n: u32) {
+fn command_benchmark(libs: &[&str], task: &str, n: u32) {
     let mut answer: Option<String> = None;
-    let mut results: Vec<(&String, Duration)> = Vec::new();
+    let mut results: Vec<(&str, Duration)> = Vec::new();
 
     println!("Benchmarking:");
     for lib_name in libs {
