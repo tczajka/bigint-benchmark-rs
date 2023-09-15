@@ -108,8 +108,8 @@ fn command_benchmark(libs: &[&str], task: &str, n: u32) {
             println!(
                 "        attempt {}: {} ms ({} iteration{})",
                 sample_number,
-                iter,
                 duration.as_millis(),
+                iter,
                 if iter == 1 { "" } else { "s" }
             );
             durations.push(duration);
