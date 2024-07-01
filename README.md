@@ -10,7 +10,7 @@ The fastest attempt is used as the result.
 | Library                                           | Version | License           | Notes                                                                                    |
 |---------------------------------------------------|---------|-------------------|------------------------------------------------------------------------------------------|
 | [rug](https://crates.io/crates/rug)               | 1.24.1  | LGPL 3.0          | Links to [GMP](https://gmplib.org/)                                                      |
-| [malachite](https://crates.io/crates/malachite)   | 0.4.14  | LGPL 3.0          | Pure Rust, derived from [GMP](https://gmplib.org) and [FLINT](https://www.flintlib.org/) |
+| [malachite](https://crates.io/crates/malachite)   | 0.4.14  | LGPL 3.0          | Derived from [GMP](https://gmplib.org) and [FLINT](https://www.flintlib.org/). Pure Rust, no_std |
 | [dashu](https://crates.io/crates/dashu)           | 0.4.2   | MIT or Apache 2.0 | Fork of [ibig](https://crates.io/crates/ibig). Pure Rust, no_std                         |
 | [ibig](https://crates.io/crates/ibig)             | 0.3.6   | MIT or Apache 2.0 | Pure Rust, no_std                                                                        |
 | [num-bigint](https://crates.io/crates/num-bigint) | 0.4.6   | MIT or Apache 2.0 | Pure Rust, no_std                                                                        |
