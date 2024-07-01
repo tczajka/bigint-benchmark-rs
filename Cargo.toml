@@ -14,10 +14,10 @@ readme = "README.md"
 [dependencies]
 clap = { version = "4.4.3", features = ["cargo"] }
 ibig = "=0.3.6"
-num-bigint = "=0.4.4"
-rug = "=1.22.0"
-malachite = "=0.4.0"
-dashu = "=0.4.0"
+num-bigint = "=0.4.6"
+rug = "=1.24.1"
+malachite = "=0.4.14"
+dashu = "=0.4.2"
 
 [profile.release]
 lto = true
