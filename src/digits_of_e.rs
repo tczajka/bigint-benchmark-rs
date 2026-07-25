@@ -1,5 +1,6 @@
-use crate::number::Number;
 use std::f64;
+
+use crate::number::Number;
 
 /// n digits of the number e.
 pub(crate) fn calculate<T: Number>(n: u32) -> String {
