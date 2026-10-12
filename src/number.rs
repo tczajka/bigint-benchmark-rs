@@ -64,13 +64,13 @@ impl Number for rug::Integer {
     }
 }
 
-impl Number for malachite::natural::Natural {
+impl Number for malachite::Natural {
     fn pow(&self, exp: u32) -> Self {
-        malachite::num::arithmetic::traits::Pow::pow(self, exp.into())
+        malachite::base::num::arithmetic::traits::Pow::pow(self, exp.into())
     }
 
     fn to_hex(&self) -> String {
-        malachite::strings::ToLowerHexString::to_lower_hex_string(self)
+        malachite::base::strings::ToLowerHexString::to_lower_hex_string(self)
     }
 
     fn mul_ref(&self, rhs: &Self) -> Self {

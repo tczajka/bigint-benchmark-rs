@@ -9,22 +9,22 @@ The fastest attempt is used as the result.
 
 | Library                                           | Version | License           | Notes                                                                                    |
 |---------------------------------------------------|---------|-------------------|------------------------------------------------------------------------------------------|
-| [rug](https://crates.io/crates/rug)               | 1.24.1  | LGPL 3.0          | Links to [GMP](https://gmplib.org/)                                                      |
-| [malachite](https://crates.io/crates/malachite)   | 0.4.14  | LGPL 3.0          | Derived from [GMP](https://gmplib.org) and [FLINT](https://www.flintlib.org/). Pure Rust, no_std |
+| [rug](https://crates.io/crates/rug)               | 1.30.0  | LGPL 3.0          | Links to [GMP](https://gmplib.org/)                                                      |
 | [dashu](https://crates.io/crates/dashu)           | 0.4.2   | MIT or Apache 2.0 | Fork of [ibig](https://crates.io/crates/ibig). Pure Rust, no_std                         |
-| [ibig](https://crates.io/crates/ibig)             | 0.3.6   | MIT or Apache 2.0 | Pure Rust, no_std                                                                        |
 | [num-bigint](https://crates.io/crates/num-bigint) | 0.4.6   | MIT or Apache 2.0 | Pure Rust, no_std                                                                        |
+| [ibig](https://crates.io/crates/ibig)             | 0.3.6   | MIT or Apache 2.0 | Pure Rust, no_std                                                                        |
+| [malachite](https://crates.io/crates/malachite)   | 0.13.0  | LGPL 3.0          | Derived from [GMP](https://gmplib.org) and [FLINT](https://www.flintlib.org/). Pure Rust, no_std |
 
 
 ## Results
 
 | Library                                           | e 100k |  e 1m |   e 10m | fib 10m | fib 100m | fib_hex 100m |
 |---------------------------------------------------|-------:|------:|--------:|--------:|---------:|-------------:|
-| [rug](https://crates.io/crates/rug)               |  0.009 | 0.184 |   2.788 |   0.171 |    2.937 |        0.575 |
-| [malachite](https://crates.io/crates/malachite)   |  0.012 | 0.240 |   3.689 |   0.306 |    5.192 |        0.933 |
-| [dashu](https://crates.io/crates/dashu)           |  0.019 | 0.756 |  19.943 |   0.773 |   26.224 |        6.718 |
-| [ibig](https://crates.io/crates/ibig)             |  0.020 | 0.649 |  20.673 |   0.793 |   26.705 |        6.725 |
-| [num-bigint](https://crates.io/crates/num-bigint) |  0.058 | 5.037 | 482.383 |   7.007 |  671.809 |        6.312 |
+| [rug](https://crates.io/crates/rug)               |  0.008 | 0.146 |   2.440 |   0.165 |    2.782 |        0.483 |
+| [dashu](https://crates.io/crates/dashu)           |  0.019 | 0.497 |  10.324 |   0.609 |   14.500 |        2.798 |
+| [num-bigint](https://crates.io/crates/num-bigint) |  0.019 | 0.582 |  18.261 |   0.741 |   23.821 |        5.430 |
+| [ibig](https://crates.io/crates/ibig)             |  0.019 | 0.602 |  19.094 |   0.759 |   25.171 |        5.193 |
+| [malachite](https://crates.io/crates/malachite)   |  0.063 | 1.548 |  24.788 |   1.733 |   27.140 |        4.250 |
 
 Times in seconds.
 
